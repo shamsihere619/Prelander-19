@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Secure Your Spot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Work Sans', sans-serif;
+      background: linear-gradient(to bottom right, #fdf2f8, #e0f2fe);
+      color: #1f2937;
+      text-align: center;
+      padding: 50px 20px;
+    }
+    .container {
+      max-width: 460px;
+      margin: auto;
+      background: white;
+      padding: 30px 25px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+    .subtext {
+      font-size: 15px;
+      font-weight: 400;
+      color: #475569;
+      margin-bottom: 20px;
+    }
+    .btn {
+      display: none;
+      padding: 14px 30px;
+      background-color: #14b8a6;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #0d9488;
+    }
+    #geoMessage, #countdown, #warning {
+      margin-top: 16px;
+      font-size: 15px;
+    }
+    #warning {
+      color: red;
+      font-weight: bold;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔐 Secure Your Spot</h1>
+    <div class="subtext">We are processing your reward access…</div>
+    <div id="geoMessage">Checking location...</div>
+    <div id="countdown">Wait <span id="timer">5</span> seconds…</div>
+    <a id="continueBtn" href="https://otieu.com/4/9647790" target="_blank">
+      <button class="btn">Claim Reward</button>
+    </a>
+    <div id="warning">Access Denied: Suspicious activity detected.</div>
+  </div>
+
+  <script>
+    fetch('https://ipapi.co/json/')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("geoMessage").textContent =
+          "You're eligible in " + data.country_name + "!";
+      })
+      .catch(() => {
+        document.getElementById("geoMessage").textContent = "Welcome!";
+      });
+
+    const isBot = /bot|crawl|spider|headless|phantom/i.test(navigator.userAgent.toLowerCase()) || navigator.webdriver;
+
+    if (isBot) {
+      document.getElementById("geoMessage").style.display = "none";
+      document.getElementById("countdown").style.display = "none";
+      document.getElementById("warning").style.display = "block";
+    } else {
+      let seconds = 5;
+      const timer = document.getElementById("timer");
+      const button = document.querySelector(".btn");
+
+      const countdown = setInterval(() => {
+        seconds--;
+        timer.textContent = seconds;
+        if (seconds <= 0) {
+          clearInterval(countdown);
+          document.getElementById("countdown").style.display = "none";
+          button.style.display = "inline-block";
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
